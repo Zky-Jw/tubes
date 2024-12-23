@@ -51,7 +51,7 @@ pipeline {
                     phpEnv.pull()
 
                     // Jalankan container Laravel Docker dan hubungkan dengan MySQL
-                    def phpContainer = phpEnv.run("-e MYSQL_HOST=${MYSQL_HOST} -e MYSQL_USER=${MYSQL_USER} -e MYSQL_PASSWORD=${MYSQL_PASSWORD} -e MYSQL_DB=${MYSQL_DB} -p 9000:80 --name laravel_app")
+                    def phpContainer = phpEnv.run("-e MYSQL_HOST=${MYSQL_HOST} -e MYSQL_USER=${MYSQL_USER} -e MYSQL_PASSWORD=${MYSQL_PASSWORD} -e MYSQL_DB=${MYSQL_DB} -p 7000:80 --name laravel_app")
                     echo 'Container environment Laravel Docker sedang berjalan...'
                 }
             }
