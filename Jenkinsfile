@@ -13,7 +13,7 @@ pipeline {
                 git branch: 'Rizky', url: 'https://github.com/Zky-Jw/tubes.git'
             }
         }
-        stage('Jalankan MySQL') {
+        stage('MySQL Sedang Berjalan') {
             steps {
                 script {
                     // Ambil image MySQL
@@ -30,7 +30,7 @@ pipeline {
                 }
             }
         }
-        stage('Jalankan phpMyAdmin') {
+        stage('phpMyAdmin Sedang Berjalan') {
             steps {
                 script {
                     // Ambil image phpMyAdmin
@@ -43,7 +43,7 @@ pipeline {
                 }
             }
         }
-        stage('Jalankan File PHP') {
+        stage('Jalankan File Laravel') {
             steps {
                 script {
                     // Ambil image environment Laravel Docker
