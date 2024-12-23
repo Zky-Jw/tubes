@@ -1,37 +1,63 @@
 pipeline {
     agent any
-    tools{
-        maven 'maven_3_5_0'
+    environment {
+        // Variabel lingkungan untuk koneksi MySQL
+        MYSQL_HOST = 'app'
+        MYSQL_USER = 'root'
+        MYSQL_PASSWORD = 'root'
+        MYSQL_DB = 'laraveldocker'
     }
-    stages{
-        stage('Build Maven'){
-            steps{
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Java-Techie-jt/devops-automation']]])
-                sh 'mvn clean install'
+    stages {
+        stage('Checkout dari Git') {
+            steps {
+                git branch: 'WDC-V2', url: 'https://github.com/JunandaDeyastusesa/komputasi-awan-1.git'
             }
         }
-        stage('Build docker image'){
-            steps{
-                script{
-                    sh 'docker build -t javatechie/devops-integration .'
-                }
+        stage('Ambil Image dari Dockerhub') {
+            steps {
+                echo 'Berhasil mengambil image...'
             }
         }
-        stage('Push image to Hub'){
-            steps{
-                script{
-                   withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
-                   sh 'docker login -u javatechie -p ${dockerhubpwd}'
+        stage('Jalankan MySQL') {
+            steps {
+                script {
+                    // Ambil image MySQL
+                    def mysql = docker.image('rizky222/mysql')
+                    mysql.pull()
 
-}
-                   sh 'docker push javatechie/devops-integration'
+                    // Jalankan container MySQL
+                    def mysqlContainer = mysql.run('-e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db_bimbelonline -e MYSQL_USER=mec -e MYSQL_PASSWORD=root --name mysql_db')
+                    echo 'Container MySQL sedang berjalan...'
+
+                    // Tunggu MySQL siap
+                    echo 'Menunggu MySQL siap...'
+                    sleep(20) // Tunggu 20 detik agar MySQL bisa mulai
                 }
             }
         }
-        stage('Deploy to k8s'){
-            steps{
-                script{
-                    kubernetesDeploy (configs: 'deploymentservice.yaml',kubeconfigId: 'k8sconfigpwd')
+        stage('Jalankan phpMyAdmin') {
+            steps {
+                script {
+                    // Ambil image phpMyAdmin
+                    def phpMyAdmin = docker.image('rizky222/phpmyadmin')
+                    phpMyAdmin.pull()
+
+                    // Jalankan container phpMyAdmin dan hubungkan dengan MySQL
+                    def phpMyAdminContainer = phpMyAdmin.run("-e PMA_HOST=${MYSQL_HOST} -e PMA_USER=${MYSQL_USER} -e PMA_PASSWORD=${MYSQL_PASSWORD} -p 9001:80 --name phpmyadmin")
+                    echo 'Container phpMyAdmin sedang berjalan...'
+                }
+            }
+        }
+        stage('Jalankan File PHP') {
+            steps {
+                script {
+                    // Ambil image environment Laravel Docker
+                    def phpEnv = docker.image('rizky222/laraveldocker')
+                    phpEnv.pull()
+
+                    // Jalankan container Laravel Docker dan hubungkan dengan MySQL
+                    def phpContainer = phpEnv.run("-e MYSQL_HOST=${MYSQL_HOST} -e MYSQL_USER=${MYSQL_USER} -e MYSQL_PASSWORD=${MYSQL_PASSWORD} -e MYSQL_DB=${MYSQL_DB} -p 9000:80 --name laravel_app")
+                    echo 'Container environment Laravel Docker sedang berjalan...'
                 }
             }
         }
