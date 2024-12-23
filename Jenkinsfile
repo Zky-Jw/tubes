@@ -13,11 +13,6 @@ pipeline {
                 git branch: 'Rizky', url: 'https://github.com/Zky-Jw/tubes.git'
             }
         }
-        stage('Ambil Image dari Dockerhub') {
-            steps {
-                echo 'Berhasil mengambil image...'
-            }
-        }
         stage('Jalankan MySQL') {
             steps {
                 script {
