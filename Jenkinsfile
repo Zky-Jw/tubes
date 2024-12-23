@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout dari Git') {
             steps {
-                git branch: 'WDC-V2', url: 'https://github.com/JunandaDeyastusesa/komputasi-awan-1.git'
+                git branch: 'Rizky', url: 'https://github.com/Zky-Jw/tubes.git'
             }
         }
         stage('Ambil Image dari Dockerhub') {
