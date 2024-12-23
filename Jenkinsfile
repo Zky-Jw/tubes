@@ -26,7 +26,7 @@ pipeline {
                     mysql.pull()
 
                     // Jalankan container MySQL
-                    def mysqlContainer = mysql.run('-e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db_bimbelonline -e MYSQL_USER=mec -e MYSQL_PASSWORD=root --name mysql_db')
+                    def mysqlContainer = mysql.run('-e MYSQL_ROOT_PASSWORD=laraveldocker -e MYSQL_DATABASE=inventorygudang -e MYSQL_USER=root -e MYSQL_PASSWORD=root --name mysql_db')
                     echo 'Container MySQL sedang berjalan...'
 
                     // Tunggu MySQL siap
