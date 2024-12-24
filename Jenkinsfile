@@ -17,7 +17,7 @@ pipeline {
             steps {
                 script {
                     // Ambil image MySQL
-                    def mysql = docker.image('rizky222/mysql')
+                    def mysql = jenkins.image('rizky222/mysql')
                     mysql.pull()
 
                     // Jalankan container MySQL
