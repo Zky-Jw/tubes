@@ -21,7 +21,7 @@ pipeline {
                     mysql.pull()
 
                     // Jalankan container MySQL
-                    def mysqlContainer = mysql.run('-e MYSQL_ROOT_PASSWORD=laraveldocker -e MYSQL_DATABASE=inventorygudang -e MYSQL_USER=root -e MYSQL_PASSWORD=root --name mysql_db')
+                    def mysqlContainer = mysql.run('-e MYSQL_ROOT_PASSWORD=laraveldocker -e MYSQL_DATABASE=inventorygudang -e MYSQL_USER=root -e MYSQL_PASSWORD=laraveldocker --name mysql_db')
                     echo 'Container MySQL sedang berjalan...'
 
                     // Tunggu MySQL siap
@@ -38,7 +38,7 @@ pipeline {
                     phpMyAdmin.pull()
 
                     // Jalankan container phpMyAdmin dan hubungkan dengan MySQL
-                    def phpMyAdminContainer = phpMyAdmin.run("-e PMA_HOST=${MYSQL_HOST} -e PMA_USER=${MYSQL_USER} -e PMA_PASSWORD=${MYSQL_PASSWORD} -p 9001:80 --name phpmyadmin")
+                    def phpMyAdminContainer = phpMyAdmin.run("-e PMA_HOST=${MYSQL_HOST} -e PMA_USER=${MYSQL_USER} -e PMA_PASSWORD=${MYSQL_PASSWORD} -p 7000:80 --name phpmyadmin")
                     echo 'Container phpMyAdmin sedang berjalan...'
                 }
             }
